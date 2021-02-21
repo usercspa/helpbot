@@ -1,0 +1,116 @@
+{
+	"actions": [
+		{
+			"say": "Hi, I can get you items or food for your house. How can I help?"
+		},
+		{
+			"listen": true
+		}
+	]
+}
+
+{
+	"actions": [
+		{
+			"say": "Ok!"
+		},
+		{
+			"collect": {
+				"name": "deliver_roomitems",
+				"questions": [
+					{
+						"question": "What would you like?",
+						"name": "item",
+						"type": "Custom.ROOMITEMS"
+					},
+					{
+						"question": "How many do you need?",
+						"name": "quantity",
+						"type": "Twilio.NUMBER"
+					}
+				],
+				"on_complete": {
+					"redirect": {
+						"method": "POST",
+						"uri": "task://complete_collect_roomitems"
+					}
+				}
+			}
+		}
+	]
+}
+
+{
+	"actions": [
+		{
+			"collect": {
+				"name": "quantity_of_item",
+				"questions": [
+					{
+						"question": "How many would you like?",
+						"name": "quantity",
+						"type": "Twilio.NUMBER"
+					}
+				],
+				"on_complete": {
+					"redirect": {
+						"method": "POST",
+						"uri": "task://complete_collect_roomitems"
+					}
+				}
+			}
+		}
+	]
+}
+
+{
+	"actions": [
+		{
+			"say": "Your items will be dropped off within 2 hours. What else can I help you with?"
+		},
+		{
+			"listen": true
+		}
+	]
+}
+
+{
+	"actions": [
+		{
+			"say": "Our kitchen is open and serving the full menu."
+		},
+		{
+			"collect": {
+				"name": "order_food",
+				"questions": [
+					{
+						"question": "What would you like to eat?",
+						"name": "Food",
+						"type": "Custom.FOOD"
+					},
+					{
+						"question": "Got it. Any special requests?",
+						"name": "special_requests"
+					}
+				],
+				"on_complete": {
+					"redirect": {
+						"method": "POST",
+						"uri": "task://complete_collect_roomservice"
+					}
+				}
+			}
+		}
+	]
+}
+
+{
+	"actions": [
+		{
+			"say": "I'm sorry didn't quite get that. Please say that again."
+		},
+		{
+			"listen": true
+		}
+	]
+}
