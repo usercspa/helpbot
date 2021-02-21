@@ -1,0 +1,111 @@
+{
+	"actions": [
+		{
+			"say": "I can help you book a new appointment, modify an existing one or tell you about upcoming appointments. How can I help you today?"
+		},
+		{
+			"listen": true
+		}
+	]
+}
+
+{
+	"actions": [
+		{
+			"say": "Okay lets get you a new appointment. I just need you to answer a few questions."
+		},
+		{
+			"collect": {
+				"name": "schedule_appt",
+				"questions": [
+					{
+						"question": "Please tell me the date you want to come in.",
+						"name": "appt_date",
+						"type": "Twilio.DATE"
+					},
+					{
+						"question": "Thanks, and what time?",
+						"name": "appt_time",
+						"type": "Twilio.TIME"
+					},
+					{
+						"question": "Awesome, last question. What is the best number to reach you on?",
+						"name": "appt_phone_number",
+						"type": "Twilio.PHONE_NUMBER"
+					}
+				],
+				"on_complete": {
+					"redirect": "task://complete_booking"
+				}
+			}
+		}
+	]
+}
+
+{
+	"actions": [
+		{
+			"say": "Your next appointment is on March 1st at 4.30 pm. I can always help you reschedule or cancel it."
+		},
+		{
+			"listen": {
+				"tasks": [
+					"cancel_appointments",
+					"change_appointments",
+					"goodbye"
+				]
+			}
+		}
+	]
+}
+
+{
+	"actions": [
+		{
+			"say": "Thanks! I've booked your appointment. See you soon :)"
+		}
+	]
+}
+
+
+{
+	"actions": [
+		{
+			"say": "Okay I've changed your appointment to the week after. What else can I help you with?"
+		},
+		{
+			"listen": {
+				"tasks": [
+					"cancel_appointments",
+					"list_appointments",
+					"goodbye"
+				]
+			}
+		}
+	]
+}
+
+{
+	"actions": [
+		{
+			"say": "Okay I've cancelled your appointment. What else can I help you with?"
+		},
+		{
+			"listen": {
+				"tasks": [
+					"book_appointments",
+					"list_appointments",
+					"goodbye"
+				]
+			}
+		}
+	]
+}
+
+{
+	"actions": [
+		{
+			"say": "Ok, I'll be here when you need me."
+		}
+	]
+}
