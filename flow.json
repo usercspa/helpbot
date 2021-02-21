@@ -1,0 +1,229 @@
+{
+  "description": "A New Flow",
+  "states": [
+    {
+      "name": "Trigger",
+      "type": "trigger",
+      "transitions": [
+        {
+          "event": "incomingMessage"
+        },
+        {
+          "next": "Welcome",
+          "event": "incomingCall"
+        },
+        {
+          "event": "incomingRequest"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    },
+    {
+      "name": "Welcome",
+      "type": "gather-input-on-call",
+      "transitions": [
+        {
+          "next": "Welcome",
+          "event": "keypress"
+        },
+        {
+          "next": "choice",
+          "event": "speech"
+        },
+        {
+          "next": "Welcome",
+          "event": "timeout"
+        }
+      ],
+      "properties": {
+        "speech_timeout": "auto",
+        "offset": {
+          "x": 90,
+          "y": 200
+        },
+        "loop": 1,
+        "finish_on_key": "#",
+        "say": "Hello there. I could help you to book a phone consultation with doctor or gather necessities. How can I help you today?",
+        "language": "en-GB",
+        "stop_gather": true,
+        "gather_language": "en",
+        "profanity_filter": "true",
+        "timeout": 5
+      }
+    },
+    {
+      "name": "choice",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "event": "noMatch"
+        },
+        {
+          "next": "bookAppointment",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to book, appointment, doctor, clinic, telemedicine",
+              "arguments": [
+                "{{widgets.choice.Choice}}"
+              ],
+              "type": "equal_to",
+              "value": "book an appointment, book appointment with doctor"
+            }
+          ]
+        },
+        {
+          "next": "getNecessities",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to order, get, items, food, delivery, necessities",
+              "arguments": [
+                "{{widgets.choice.Choice}}"
+              ],
+              "type": "equal_to",
+              "value": "order, get, items, food, delivery, necessities"
+            }
+          ]
+        },
+        {
+          "next": "say_play_1",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to no, nope, it is all, no thanks",
+              "arguments": [
+                "{{widgets.choice.Choice}}"
+              ],
+              "type": "equal_to",
+              "value": "no, nope, it is all, no thanks"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.choice.Choice}}",
+        "offset": {
+          "x": 100,
+          "y": 470
+        }
+      }
+    },
+    {
+      "name": "bookAppointment",
+      "type": "send-to-auto-pilot",
+      "transitions": [
+        {
+          "next": "gather_1",
+          "event": "sessionEnded"
+        },
+        {
+          "next": "bookAppointment",
+          "event": "failure"
+        },
+        {
+          "next": "bookAppointment",
+          "event": "timeout"
+        }
+      ],
+      "properties": {
+        "chat_channel": "{{trigger.message.ChannelSid}}",
+        "offset": {
+          "x": 690,
+          "y": 710
+        },
+        "autopilot_assistant_sid": "UA516aef0cec9899f9aec03feabf0b670a",
+        "from": "{{flow.channel.address}}",
+        "chat_service": "{{trigger.message.InstanceSid}}",
+        "body": "{{trigger.message.Body}}",
+        "timeout": 14400
+      }
+    },
+    {
+      "name": "getNecessities",
+      "type": "send-to-auto-pilot",
+      "transitions": [
+        {
+          "next": "gather_1",
+          "event": "sessionEnded"
+        },
+        {
+          "next": "getNecessities",
+          "event": "failure"
+        },
+        {
+          "next": "getNecessities",
+          "event": "timeout"
+        }
+      ],
+      "properties": {
+        "chat_channel": "{{trigger.message.ChannelSid}}",
+        "offset": {
+          "x": 280,
+          "y": 720
+        },
+        "autopilot_assistant_sid": "UA20327a12e8bc7618b703176b8f7979b5",
+        "from": "{{flow.channel.address}}",
+        "chat_service": "{{trigger.message.InstanceSid}}",
+        "body": "{{trigger.message.Body}}",
+        "timeout": 14400
+      }
+    },
+    {
+      "name": "say_play_1",
+      "type": "say-play",
+      "transitions": [
+        {
+          "event": "audioComplete"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -30,
+          "y": 1130
+        },
+        "loop": 1,
+        "say": "Goodbye!"
+      }
+    },
+    {
+      "name": "gather_1",
+      "type": "gather-input-on-call",
+      "transitions": [
+        {
+          "event": "keypress"
+        },
+        {
+          "next": "choice",
+          "event": "speech"
+        },
+        {
+          "event": "timeout"
+        }
+      ],
+      "properties": {
+        "speech_timeout": "auto",
+        "offset": {
+          "x": 500,
+          "y": 980
+        },
+        "loop": 1,
+        "finish_on_key": "#",
+        "say": "Anything else I could help?",
+        "stop_gather": true,
+        "gather_language": "en",
+        "profanity_filter": "true",
+        "timeout": 5
+      }
+    }
+  ],
+  "initial_state": "Trigger",
+  "flags": {
+    "allow_concurrent_calls": true
+  }
+}
